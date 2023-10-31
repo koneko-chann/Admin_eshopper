@@ -43,7 +43,16 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Danh mục sản phẩm
-                            <span class="right badge badge-danger">New</span>
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('menus.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Menu
+
                         </p>
                     </a>
                 </li>

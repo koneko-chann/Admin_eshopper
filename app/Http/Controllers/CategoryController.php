@@ -53,7 +53,7 @@ return view('category.edit',compact('category','htmlOption'));
             }
         }
         $concat_string=rtrim($concat_string,',');
-        if(!empty($concat_string) || !is_null($concat_string))
+        if(!empty($concat_string) || is_null($concat_string))
             return redirect()->route('categories.index')->with('message','Không thể xóa vì có các danh mục con: '.$concat_string);
         $finded= $this->category->find($id)->delete();
         return redirect()->route('categories.index');
