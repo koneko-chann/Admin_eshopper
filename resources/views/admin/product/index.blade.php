@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="content-wrapper">
-        @include('partial.content-header',['name'=>'category','key'=>'List'])
+        @include('partial.content-header',['name'=>'Product','key'=>'List'])
 
         <div class="content">
             <div class="container-fluid">

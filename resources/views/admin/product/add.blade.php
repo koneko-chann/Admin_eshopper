@@ -29,13 +29,13 @@
                                 <label >Giá sản phẩm</label>
                                 <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm">
                                 <label >Ảnh đại dện</label>
-                                <input name="image_path" type="file" class="form-control-file" >
+                                <input name="feature_image_path" type="file" class="form-control-file" >
                                 <label >Ảnh chi tiết</label>
-                                <input multiple name="feature_image_path" type="file" class="form-control-file" >
+                                <input multiple name="image_path[]" type="file" class="form-control-file" >
                             </div>
                             <div class="mb-3">
-                                <label>Chọn danh mục </label></br>
-                                <select class="form-control select2_init" aria-label="Default select example" name="category">
+                                <label>Chọn danh mục </label><br>
+                                <select class="form-control select2_init" aria-label="Default select example" name="category_id">
                                     <option  value="0">Vui lòng chọn</option>
                                     {!! $htmlOption !!}
                                 </select>
