@@ -7,16 +7,21 @@
 @section('css')
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+    .select2-selection__choice{
+        background-color: #0a0e14 !important;
+    }
+    </style>
 @endsection
 @section('content')
 
     <div class="content-wrapper">
         @include('partial.content-header',['name'=>'Product','key'=>'Add'])
-
+        <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6">  <form action="" method="post" enctype="multipart/form-data">
+                    <div class="col-md-6">
                             @csrf
                             <div class="mb-3">
                                 <label >Tên sản phẩm</label>
@@ -24,9 +29,9 @@
                                 <label >Giá sản phẩm</label>
                                 <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm">
                                 <label >Ảnh đại dện</label>
-                                <input name="image_path" type="file" class="form-control" >
+                                <input name="image_path" type="file" class="form-control-file" >
                                 <label >Ảnh chi tiết</label>
-                                <input multiple name="feature_image_path" type="file" class="form-control" >
+                                <input multiple name="feature_image_path" type="file" class="form-control-file" >
                             </div>
                             <div class="mb-3">
                                 <label>Chọn danh mục </label></br>
@@ -37,37 +42,84 @@
                             </div>
                             <div class="form-group">
                                 <label>Nhập tags cho sản phaamr</label>
-                                <select class="form-control tags_select_choose" multiple="multiple">
+                                <select name = "tags[]" class="form-control tags_select_choose" multiple="multiple">
 
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Nhập nội dung</label>
-                                <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
 
+                    </div>
+<div class="col-md-12">
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Nhập nội dung</label>
+        <textarea name="content" class="form-control tinymce_editor_init" id="exampleFormControlTextarea1" rows="8"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</div>
+                    <div class="col-md-12">
+                    </div>
                 </div>
+
+
             </div>
         </div>
+        </form>
     </div>
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(function (){
-        $(".tags_select_choose").select2({
-            tags: true,
-            tokenSeparators: [',', ' ']
-        });
-        $(".select2_init").select2({
+    <script>
+        $(function (){
+            $(".tags_select_choose").select2({
+                tags: true,
+                tokenSeparators: [',', ' ']
+            });
+            $(".select2_init").select2({
 
-            allowClear: true
+                allowClear: true
 
+            })
         })
-    })
-</script>
+    </script>
+    <script src="https://cdn.tiny.cloud/1/01gqvodz2c0gvup83fecsap0fffx5om3wdsyehc6xupu7lz7/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        let editor_config = {
+            path_absolute : "/",
+            selector: 'textarea.tinymce_editor_init',
+            relative_urls: false,
+            plugins: [
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table directionality",
+                "emoticons template paste textpattern"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+            file_picker_callback : function(callback, value, meta) {
+                let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+                let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+
+                let cmsURL = editor_config.path_absolute + 'filemanager?editor=' + meta.fieldname;
+                if (meta.filetype == 'image') {
+                    cmsURL = cmsURL + "&type=Images";
+                } else {
+                    cmsURL = cmsURL + "&type=Files";
+                }
+
+                tinyMCE.activeEditor.windowManager.openUrl({
+                    url : cmsURL,
+                    title : 'Filemanager',
+                    width : x * 0.8,
+                    height : y * 0.8,
+                    resizable : "yes",
+                    close_previous : "no",
+                    onMessage: (api, message) => {
+                        callback(message.content);
+                    }
+                });
+            }
+        };
+
+        tinymce.init(editor_config);
+    </script>
 @endsection
 
