@@ -8,72 +8,79 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-    .select2-selection__choice{
-        background-color: #0a0e14 !important;
-    }
+        .select2-selection__choice{
+            background-color: #0a0e14 !important;
+        }
+        img{
+            height: 200px;
+            width: 100px;
+        }
     </style>
 @endsection
 @section('content')
 
     <div class="content-wrapper">
-        @include('partial.content-header',['name'=>'Product','key'=>'Add'])
-        <div class="col-md-12">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
-        <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
+        @include('partial.content-header',['name'=>'Product','key'=>'Edit'])
+        <form action="{{route('product.update',['id'=>$product->id])}}" method="post" enctype="multipart/form-data">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
                             @csrf
                             <div class="mb-3">
                                 <label >Tên sản phẩm</label>
-                                <input name="name" type="text" class="form-control" placeholder="Nhập tên sanrn phẩm">
+                                <input name="name" type="text" class="form-control" placeholder="Nhập tên sanrn phẩm" value="{{$product->name}}">
                                 <label >Giá sản phẩm</label>
-                                <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm">
+                                <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm" value="{{$product->price}}">
                                 <label >Ảnh đại dện</label>
-                                <input name="feature_image_path" type="file" class="form-control-file" >
+                                <input name="feature_image_path" type="file" class="form-control-file"  >
+                                <div   class="col-md-12">
+                                    <img src="{{'/test/public'.$product->feature_image_path}}">
+                                </div>
                                 <label >Ảnh chi tiết</label>
                                 <input multiple name="image_path[]" type="file" class="form-control-file" >
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach($product->productImages as $productImageItem)
+                                        <div class="col-md-3">
+                                            <img src="{{'/test/public'.$productImageItem->image_path}}" alt="">
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label>Chọn danh mục </label><br>
                                 <select class="form-control select2_init" aria-label="Default select example" name="category_id">
                                     <option  value="0">Vui lòng chọn</option>
-                                    {!! $htmlOption !!}
+                                   {!! $htmlOption !!}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Nhập tags cho sản phaamr</label>
                                 <select name = "tags[]" class="form-control tags_select_choose" multiple="multiple">
-
+@foreach($product->tags as $tagsItem)
+    <option value="{{$tagsItem->name}}" selected>{{$tagsItem['name']}}</option>
+@endforeach
                                 </select>
                             </div>
 
-                    </div>
-<div class="col-md-12">
-    <div class="form-group">
-        <label for="exampleFormControlTextarea1">Nhập nội dung</label>
-        <textarea name="content" class="form-control tinymce_editor_init" id="exampleFormControlTextarea1" rows="8"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Nhập nội dung</label>
+                                <textarea name="content" class="form-control tinymce_editor_init" id="exampleFormControlTextarea1" rows="8" >{{$product->content}}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
 
-</div>
-                    <div class="col-md-12">
+                        </div>
+                        <div class="col-md-12">
+                        </div>
                     </div>
+
+
                 </div>
-
-
             </div>
-        </div>
         </form>
     </div>
 @endsection
