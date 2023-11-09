@@ -3,17 +3,17 @@
 @extends('layouts.admin')
 
 @section('title')
-    <title>Sản phẩm</title>
+    <title>Trang chủ</title>
 @endsection('title')
 @section('css')
     <style>
-        img {
-            height: 150px;
-            width: 100px;
-
-        }
+    img{
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+    }
     </style>
-@endsection
+    @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -61,23 +61,13 @@
 @section('content')
 
     <div class="content-wrapper">
-        @include('partial.content-header',['name'=>'Product','key'=>'List'])
-        <div class="col-md-12">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
+        @include('partial.content-header',['name'=>'Slider','key'=>'List'])
+
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <a href="{{route('product.create')}}" class="btn btn-success float-right m-2">Add</a>
+                        <a href="{{route('slider.create')}}" class="btn btn-success float-right m-2">Add</a>
                     </div>
                     @if (session('message'))
                         <div class="alert alert-danger">
@@ -90,28 +80,26 @@
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Hình ảnh</th>
-                                <th scope="col">Danh mục</th>
+                                <th scope="col">Tên slider</th>
+                                <th scope="col">Mo ta</th>
+                                <th scope="col">Hinh anh</th>
                                 <th scope="col">Action</th>
 
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($products as $product)
+                            @foreach($sliders as $slider)
 
                                 <tr>
-                                    <th scope="row">{{$product->id}}</th>
-                                    <td>{{$product->name}}</td>
-                                    <td>{{number_format($product->price)}}</td>
-                                    <td><img src="{{'/test/public'.$product->feature_image_path}}" alt=""/></td>
-                                    <td>{{optional($product->category)->name}}</td>
+                                    <th scope="row">{{$slider['id']}}</th>
+                                    <td>{{$slider['name']}}</td>
+                                    <td>{{$slider['description']}}</td>
+                                    <td><img src="{{'/test/public'.$slider['image_path']}}"></td>
                                     <td>
-                                        <a href="{{route('product.edit',['id'=>$product->id])}}"
+                                        <a href="{{route('slider.edit',['id'=>$slider['id']])}}"
                                            class="btn btn-default">Edit</a>
-                                        <a href="{{route('product.delete',['id'=>$product->id])}}"
-                                           data-url="{{route('product.delete',['id'=>$product['id']])}}"
+                                        <a href=""
+                                           data-url="{{route('slider.delete',['id'=>$slider['id']])}}"
                                            class="btn btn-danger action_delete">Delete</a>
                                     </td>
 
@@ -122,7 +110,7 @@
                         </table>
                     </div>
                     <div class="col-md-12">
-                        {{$products->links()}}}
+{{$sliders->links()}}
                     </div>
                 </div>
             </div>

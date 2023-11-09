@@ -71,12 +71,13 @@
 
                         </p>
                     </a>
-                </li> <li class="nav-item">
-                    <a href="{{route('menus.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Menu
 
+                </li> <li class="nav-item">
+                    <a href="{{route('slider.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                            Slider
                         </p>
                     </a>
                 </li>
@@ -86,3 +87,8 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+<script>
+    function endSS() {
+        window.close();
+    }
+</script>

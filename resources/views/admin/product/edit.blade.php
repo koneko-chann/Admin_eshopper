@@ -29,7 +29,8 @@
                             @csrf
                             <div class="mb-3">
                                 <label >Tên sản phẩm</label>
-                                <input name="name" type="text" class="form-control" placeholder="Nhập tên sanrn phẩm" value="{{$product->name}}">
+                                <input name="name" type="text" class="form-control" placeholder="Nhập tên sản phẩm"
+                                       value="{{$product->name}}">
                                 <label >Giá sản phẩm</label>
                                 <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm" value="{{$product->price}}">
                                 <label >Ảnh đại dện</label>

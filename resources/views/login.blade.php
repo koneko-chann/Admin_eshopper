@@ -291,13 +291,17 @@
             @csrf
             <input type="text" id="email" class="fadeIn second" name="email" placeholder="E-mail">
             <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
+            <div>
             <input type="submit" class="fadeIn fourth" value="Log In">
+                <input type="submit" class="fadeIn fourth" value="Register">
+            </div>
         </form>
 
         <!-- Remind Passowrd -->
         <div id="formFooter">
             <a class="underlineHover" href="#">Forgot Password?</a>
         </div>
+
 
     </div>
 </div>
