@@ -80,6 +80,14 @@
                             Slider
                         </p>
                     </a>
+                </li><li class="nav-item">
+                    <a href="{{route('settings.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                            Settings
+                        </p>
+                    </a>
                 </li>
             </ul>
         </nav>

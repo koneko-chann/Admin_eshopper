@@ -128,6 +128,33 @@ Route::prefix('admin')->group(function () {
             'uses'=>'App\Http\Controllers\SliderAdminController@update'
         ]);
     });
+    //
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [
+            'as'=> 'settings.index',
+            'uses'=>'App\Http\Controllers\SettingsController@index'
+        ]);
+        Route::get('/create', [
+            'as'=> 'settings.create',
+            'uses'=>'App\Http\Controllers\SettingsController@create'
+        ]);
+        Route::post('/store',[
+            'as'=>'settings.store',
+            'uses'=>'App\Http\Controllers\SettingsController@store'
+        ]);
+        Route::get('/edit/{id}',[
+            'as'=>'settings.edit',
+            'uses'=>'App\Http\Controllers\SettingsController@edit'
+        ]);
+        Route::get('/delete/{id}',[
+            'as'=>'settings.delete',
+            'uses'=>'App\Http\Controllers\SettingsController@delete'
+        ]);
+        Route::post('/update/{id}',[
+            'as'=>'settings.update',
+            'uses'=>'App\Http\Controllers\SettingsController@update'
+        ]);
+    });
 });
 
 
