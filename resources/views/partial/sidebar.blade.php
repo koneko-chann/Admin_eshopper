@@ -88,10 +88,35 @@
                             Settings
                         </p>
                     </a>
+                </li><li class="nav-item">
+                    <a href="{{route('users.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                           Danh sách nhân viên
+                        </p>
+                    </a>
+                </li><li class="nav-item">
+                    <a href="{{route('roles.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                           Danh sách vai tro
+                        </p>
+                    </a>
                 </li>
             </ul>
+
         </nav>
         <!-- /.sidebar-menu -->
+
+    </div>
+    <div class="flex-grow-1 w-100">
+
+
+    <p class="nav-item text-white float-right align-bottom justify-content-end ">
+        <button>Log out</button>
+    </p>
     </div>
     <!-- /.sidebar -->
 </aside>
