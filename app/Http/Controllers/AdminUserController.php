@@ -66,21 +66,26 @@ return redirect()->route('users.index');
 
 
             DB::beginTransaction();
-
+            if ($request->has('password') && $request->filled('password')) {
+             $pw=Hash::make($request['password']);
+            } else {
+            $pw=$this->users->find($id)['password'];
+            }
             $this->users->find($id)->update([
                 'name' => $request['name'],
                 'email' => $request['email'],
-                'password' => Hash::make($request['password'])
+                'password' => $pw
             ]);
             $user=$this->users->find($id);
             $roleIDs = $request['role_id'];
             $user->roles()->sync($roleIDs);
             DB::commit();
-
+return redirect()->route('users.index');
         }
         catch (\Exception $exception){
 
             DB::rollBack();
+            return redirect()->route('users.index');
 
         }
     }

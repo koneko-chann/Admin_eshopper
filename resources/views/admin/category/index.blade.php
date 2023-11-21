@@ -16,7 +16,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
+                        @can('category_add')
+
                         <a href="{{route('categories.create')}}" class="btn btn-success float-right m-2">Add</a>
+                        @endcan
                     </div>
                     @if (session('message'))
                         <div class="alert alert-danger">
@@ -41,10 +44,14 @@
                                     <th scope="row">{{$category->id}}</th>
                                     <td>{{$category->name}}</td>
                                     <td>
+                                        @can('category_edit')
                                         <a href="{{route('categories.edit',['id'=> $category->id] )}}"
                                            class="btn btn-default">Edit</a>
+                                        @endcan
+                                            @can('category_delete')
                                         <a href="{{route('categories.delete',['id'=> $category->id])}}"
                                            class="btn btn-danger">Delete</a>
+                                                @endcan
                                     </td>
 
                                 </tr>

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 /*
@@ -12,6 +13,10 @@ use App\Http\Controllers\CategoryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/logout', function () {
+    Auth::logout(); // Đăng xuất người dùng
+    return redirect('/admin'); // Chuyển hướng đến trang chủ hoặc URL mong muốn khác
+})->name('logout');
 Route::get('/',function (){
     return redirect('admin');
 });
@@ -26,11 +31,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/create', [
             'as'=> 'categories.create',
             'uses'=>'App\Http\Controllers\CategoryController@create'
-        ]);
+        ])->middleware('can:category_add');
         Route::get('/',[
             'as'=>'categories.index',
-            'uses'=>'App\Http\Controllers\CategoryController@index'
-        ]);
+            'uses'=>'App\Http\Controllers\CategoryController@index',
+
+        ])->middleware('can:category_list');
         Route::post('/store',[
             'as'=>'categories.store',
             'uses'=>'App\Http\Controllers\CategoryController@store'
@@ -38,11 +44,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}',[
             'as'=>'categories.edit',
             'uses'=>'App\Http\Controllers\CategoryController@edit'
-        ]);
+        ])->middleware('can:category_edit');
         Route::get('/delete/{id}',[
             'as'=>'categories.delete',
             'uses'=>'App\Http\Controllers\CategoryController@delete'
-        ]);
+        ])->middleware('can:category_delete');
         Route::post('/update/{id}',[
             'as'=>'categories.update',
             'uses'=>'App\Http\Controllers\CategoryController@update'
@@ -52,7 +58,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'menus.index',
             'uses'=>'App\Http\Controllers\MenuController@index'
-        ]);
+        ])->middleware('can:menu_list');
         Route::get('/create', [
             'as'=> 'menus.create',
             'uses'=>'App\Http\Controllers\MenuController@create'
@@ -79,7 +85,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'product.index',
             'uses'=>'App\Http\Controllers\AdminProductController@index'
-        ]);
+        ])->middleware('can:product_list');
         Route::get('/create', [
             'as'=> 'product.create',
             'uses'=>'App\Http\Controllers\AdminProductController@create'
@@ -91,7 +97,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}',[
             'as'=>'product.edit',
             'uses'=>'App\Http\Controllers\AdminProductController@edit'
-        ]);
+        ])->middleware('can:product-edit,id');
         Route::post('/update/{id}',[
             'as'=>'product.update',
             'uses'=>'App\Http\Controllers\AdminProductController@update'
@@ -106,7 +112,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'slider.index',
             'uses'=>'App\Http\Controllers\SliderAdminController@index'
-        ]);
+        ])->middleware('can:slider_list');
         Route::get('/create', [
             'as'=> 'slider.create',
             'uses'=>'App\Http\Controllers\SliderAdminController@create'
@@ -133,7 +139,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'settings.index',
             'uses'=>'App\Http\Controllers\SettingsController@index'
-        ]);
+        ])->middleware('can:setting_list');
         Route::get('/create', [
             'as'=> 'settings.create',
             'uses'=>'App\Http\Controllers\SettingsController@create'
@@ -160,7 +166,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'users.index',
             'uses'=>'App\Http\Controllers\AdminUserController@index'
-        ]);
+        ])->middleware('can:user_list');
         Route::get('/create', [
             'as'=> 'users.create',
             'uses'=>'App\Http\Controllers\AdminUserController@create'
@@ -187,7 +193,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [
             'as'=> 'roles.index',
             'uses'=>'App\Http\Controllers\AdminRoleController@index'
-        ]);
+        ])->middleware('can:role_list');
         Route::get('/create', [
             'as'=> 'roles.create',
             'uses'=>'App\Http\Controllers\AdminRoleController@create'
@@ -209,7 +215,18 @@ Route::prefix('admin')->group(function () {
             'uses'=>'App\Http\Controllers\AdminRoleController@update'
         ]);
     });
+//
+    Route::prefix('permissions')->group(function () {
 
+        Route::get('/create', [
+            'as'=> 'permissions.create',
+            'uses'=>'App\Http\Controllers\AdminPermissionController@createPermissions'
+       ]);
+        Route::post('/store',[
+            'as'=>'permissions.store',
+            'uses'=>'App\Http\Controllers\AdminPermissionController@store'
+        ]);
+    });
 });
 
 

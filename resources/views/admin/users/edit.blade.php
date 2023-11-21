@@ -27,7 +27,7 @@
                             </div>
                             <div class="mb-3">
                                 <label >Email</label>
-                                <input name="email" type="text" class="form-control" placeholder="Nhập email " value="{{$user['name']}}">
+                                <input name="email" type="text" class="form-control" placeholder="Nhập email " value="{{$user['email']}}">
                             </div>
                             <div class="mb-3">
                                 <label >Password</label>

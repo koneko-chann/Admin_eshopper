@@ -9,13 +9,17 @@
     $('.checkbox_wrapper').on('click',function (){
         $(this).parents('.card').find('.checkbox_children').prop('checked',$(this).prop('checked'))
     })
+    $('.checkall').on('click',function (){
+        $(this).parents().find('.checkbox_children').prop('checked',$(this).prop('checked'));
+        $(this).parents().find('.checkbox_wrapper').prop('checked',$(this).prop('checked'))
+    })
 </script>
 @endsection
 
 @section('content')
 
     <div class="content-wrapper">
-        @include('partial.content-header',['name'=>'Roles','key'=>'Add'])
+        @include('partial.content-header',['name'=>'Roles','key'=>'Edit'])
         <div class="col-md-12">
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -30,23 +34,31 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-12">  <form action="{{route('roles.store')}}" method="post" enctype="multipart/form-data">
+                    <div class="col-md-12">  <form action="{{route('roles.update',['id'=>$role['id']])}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label >Tên vai trò</label>
-                                <input name="name" type="text" class="form-control" placeholder="Nhập tên slider">
+                                <input name="name" type="text" class="form-control" placeholder="Nhập tên slider" value="{{$role['name']}}">
 
                             </div>
                             <div class="mb-3">
                                 <label >Mô tả</label>
                                 <textarea name="display_name" rows="4" class="form-control" >
-{{old('display_name')}}
+{{$role['display_name']}}
                                     </textarea>
 
                             </div>
 <div class="col-md-12 flex">
 <div class="w-3/4 flex-grow-1">
-@foreach($permissions as $permission)
+    <div class="col-md-12">
+        <div class="row">
+            <label>
+                Check all
+            </label>
+            <input type="checkbox" class="checkall">
+        </div>
+    </div>
+@foreach($permissionsParent as $permission)
     <div class="card text-black bg-white w-100 flex-grow-1" >
         <div class="card-header bg-cyan">
             <label for="">
@@ -59,7 +71,9 @@
                <div class="card-body  ">
                    <h5 class="card-title">
                        <label for="">
-                           <input type="checkbox" class="checkbox_children" name="permission_id[]" value="{{$PermissionChildrenItem->id}}">
+                           <input type="checkbox" class="checkbox_children" name="permission_id[]"
+                                  {{$permissionsChecked->contains($PermissionChildrenItem)? 'checked' :' '}}
+                                  value="{{$PermissionChildrenItem->id}}">
                        </label>
                        {{ $PermissionChildrenItem->name}}
                    </h5>
