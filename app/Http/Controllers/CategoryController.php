@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Components\Recursive;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -16,6 +17,7 @@ class CategoryController extends Controller
     }
 
     public function create(){
+        
 
         $htmlOption=$this->getCategories($parent_id='');
        return view('admin.category.add',compact('htmlOption'));

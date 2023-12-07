@@ -26,6 +26,7 @@ Route::post('/admin', 'App\Http\Controllers\AdminController@postLoginAdmin');
 Route::get('/home', function () {
     return view('home');
 })->name('home');
+
 Route::prefix('admin')->group(function () {
     Route::prefix('categories')->group(function () {
         Route::get('/create', [
@@ -97,7 +98,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}',[
             'as'=>'product.edit',
             'uses'=>'App\Http\Controllers\AdminProductController@edit'
-        ])->middleware('can:product-edit,id');
+        ]);
         Route::post('/update/{id}',[
             'as'=>'product.update',
             'uses'=>'App\Http\Controllers\AdminProductController@update'

@@ -46,12 +46,12 @@ return $user->checkPermissionAccess(config('permissions.access.category_list'));
         });Gate::define('user_list', function (User $user) {
             return $user->checkPermissionAccess(config('permissions.access.user_list'));
         });
-        Gate::define('product_edit', function (User $user, $id) {
+        // Gate::define('product_edit', function (User $user, $id) {
 
-            if ($user->checkPermissionAccess('edit_product') && $user['id'] ==Product::find($id)['user_id'])
-                return true;
-            return false;
-        });
+        //     if ($user->checkPermissionAccess('edit_product') && $user['id'] ==Product::find($id)['user_id'])
+        //         return true;
+        //     return false;
+        // });
 
 
     }
