@@ -22,4 +22,7 @@ class Product extends Model
     public function productImages(){
         return $this->hasMany(ProductImage::class,'product_id');
     }
+    public function flashSales(){
+        return $this->belongsToMany(FlashSale::class,'product_sale','product_id','flashsale_id')->withTimestamps()->withPivot('discount','discount_price','quantity','price_after_discount');
+    }
 }

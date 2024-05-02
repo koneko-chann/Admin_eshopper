@@ -94,6 +94,8 @@
                                 <th scope="col">Giá</th>
                                 <th scope="col">Hình ảnh</th>
                                 <th scope="col">Danh mục</th>
+                                <th scope="col">Ẩn</th>
+
                                 <th scope="col">Action</th>
 
                             </tr>
@@ -107,6 +109,11 @@
                                     <td>{{number_format($product->price)}}</td>
                                     <td><img src="{{'/test/public'.$product->feature_image_path}}" alt=""/></td>
                                     <td>{{optional($product->category)->name}}</td>
+                                    <td>
+                                        <a href="{{route('product.hide',['id'=>$product->id])}}">
+                                            <span class="fa{{ $product->status == 1 ? ' fa-eye' : ' fa-eye-slash' }}"></span>
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="{{route('product.edit',['id'=>$product->id])}}"
                                            class="btn btn-default">Edit</a>
@@ -122,7 +129,7 @@
                         </table>
                     </div>
                     <div class="col-md-12">
-                        {{$products->links()}}}
+                        {{$products->links()}}
                     </div>
                 </div>
             </div>

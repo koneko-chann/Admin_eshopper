@@ -28,14 +28,16 @@
                         <div class="col-md-6">
                             @csrf
                             <div class="mb-3">
+                                <label >ID</label>
+                                <input type="text" disabled name="id" class="form-control" value="{{$product->id}}">
                                 <label >Tên sản phẩm</label>
                                 <input name="name" type="text" class="form-control" placeholder="Nhập tên sản phẩm"
                                        value="{{$product->name}}">
                                 <label >Giá sản phẩm</label>
                                 <input name="price" type="text" class="form-control" placeholder="Nhập giá sản phẩm" value="{{$product->price}}">
                                 <label >Ảnh đại dện</label>
-                                <input name="feature_image_path" type="file" class="form-control-file"  >
-                                <div   class="col-md-12">
+                                <input name="feature_image_path" type="file" class="form-control-file"   >
+                                <div  class="col-md-12">
                                     <img src="{{'/test/public'.$product->feature_image_path}}">
                                 </div>
                                 <label >Ảnh chi tiết</label>

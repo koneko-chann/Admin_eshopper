@@ -8,6 +8,8 @@ use App\Traits\StorageImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 class SliderAdminController extends Controller
 {
     //
@@ -51,20 +53,24 @@ class SliderAdminController extends Controller
 
         return view('admin.slider.edit',compact('slider'));
     }
-public  function  update(SliderAddRequest $request,$id,$slider){
+public  function  update(SliderAddRequest $request,$id){
     try {
-
         $dataInsert = [
             'name' => $request['name'],
             'description' => $request['description'],
-
         ];
+
         $dataImageSlider = $this->storageTraitUpload($request, 'image_path', 'slider');
         if (!empty($dataInsert)) {
+            $imagePath = $this->slider->find($id)->image_path;
+            $imagePathString = strval($imagePath);
+            $this->storageTraitDelete($imagePathString);
             $dataInsert['image_name'] = $dataImageSlider['file_name'];
             $dataInsert['image_path'] = $dataImageSlider['file_path'];
+            
         }
         $this->slider->find($id)->update($dataInsert);
+
         return redirect()->route('slider.index');
 
     }
@@ -74,7 +80,10 @@ public  function  update(SliderAddRequest $request,$id,$slider){
 }
 public function delete($id){
     try {
+        $this->storageTraitDelete($this->slider->find($id)->image_path);
+
         $this->slider->find($id)->delete();
+
         return response()->json([
             'code'=>200,
             'message'=>'Success'

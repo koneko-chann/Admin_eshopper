@@ -79,7 +79,8 @@
                            Danh sách nhân viên
                         </p>
                     </a>
-                </li><li class="nav-item">
+                </li>
+                <li class="nav-item">
                     <a href="{{route('roles.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
 
@@ -87,15 +88,32 @@
                            Danh sách vai tro
                         </p>
                     </a>
-                </li><li class="nav-item">
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('flashsales.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                           Flash Sale
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('warehouse.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Quản lý dữ liệu kho
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item" hidden>
                     <a href="{{route('permissions.create')}}" class="nav-link">
-
-
                         <p>
                            Tao du lieu bang Permissions
                         </p>
                     </a>
                 </li>
+               
             </ul>
 
         </nav>

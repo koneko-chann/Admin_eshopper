@@ -46,11 +46,12 @@ class AdminProductController extends Controller
     }
     public function store(ProductAddRequest $request)
     {
+        DB::beginTransaction();
         try {
             $dataProductCreate = $this->getDataProductCreate($request);
             $product = $this->product->create($dataProductCreate);
             // Insert data to product_images
-            $imageRQ = $request['image_path'];
+            $imageRQ = $request->image_path;
             if ($request->hasFile('image_path')) {
                 foreach ($imageRQ as $fileItem) {
                     $dataProductImageDetail = $this->storageTraitUploadMultiple($fileItem, 'product');
@@ -86,17 +87,36 @@ class AdminProductController extends Controller
         $htmlOption = $this->getCategories($parent_id = $product->category_id);
         return view('admin.product.edit', compact('htmlOption', 'product'));
     }
-    public  function  update(Request $request, $id)
+    public function update(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
-            $dataProductUpdate = $this->getDataProductCreate($request);
-            $this->product->find($id)->update($dataProductUpdate);
             $product = $this->product->find($id);
-            // Insert data to product_images
-            $imageRQ = $request['image_path'];
+            if (!$product) {
+                throw new \Exception('Product not found');
+            }
+    
+            $dataProductUpdate = $this->getDataProductCreate($request, $product);
+            if($request->hasFile('feature_image_path')){
+                $this->storageTraitDelete($product->feature_image_path);
+               
+            }
+            else{
+                $dataProductUpdate['feature_image_name'] = $product['feature_image_name'];
+                $dataProductUpdate['feature_image_path'] = $product['feature_image_path'];
+            }
+            $product->update($dataProductUpdate);
+    
+            // Check if new images are uploaded
             if ($request->hasFile('image_path')) {
-                $this->productImage->where('product_id', $id)->delete();
-                foreach ($imageRQ as $fileItem) {
+                // Delete existing product images
+              $image_path=  $product->images();
+                foreach($image_path as $image){
+                    $this->storageTraitDelete($image->image_path);
+                }
+                $image_path->delete();
+                // Insert new images to product_images
+                foreach ($request['image_path'] as $fileItem) {
                     $dataProductImageDetail = $this->storageTraitUploadMultiple($fileItem, 'product');
                     $product->images()->create([
                         'image_path' => $dataProductImageDetail['file_path'],
@@ -104,55 +124,162 @@ class AdminProductController extends Controller
                     ]);
                 }
             }
+    
+            // Sync tags
             $tagIds = [];
-            if (!empty($request['tags']))
+            if (!empty($request['tags'])) {
                 foreach ($request['tags'] as $tagItem) {
-                    $tagInstance = Tag::firstOrCreate([
-                        'name' => $tagItem
-                    ]);
+                    $tagInstance = Tag::firstOrCreate(['name' => $tagItem]);
                     $tagIds[] = $tagInstance['id'];
-
                 }
+            }
             $product->tags()->sync($tagIds);
-
+    
             DB::commit();
             return redirect()->route('product.index');
-        }
-        //Insert tags
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             DB::rollBack();
-            Log::error('MEssage: ' . $exception->getMessage() . 'Line: ' . $exception->getLine());
-            return redirect()->route('product.index')->with($exception);
+            Log::error('Message: ' . $exception->getMessage() . 'Line: ' . $exception->getLine());
+            return redirect()->route('product.index')->withErrors($exception->getMessage());
         }
     }
+
+public function getDataProductCreate(Request $request, $product = null): array
+{
+    $dataProductCreate = [
+        'name' => $request['name'],
+        'price' => $request['price'],
+        'content' => $request['content'],
+        'user_id' => auth()->id(),
+        'category_id' => $request['category_id']
+    ];
+
+    if ($request->hasFile('feature_image_path')) {
+        $data = $this->storageTraitUpload($request, 'feature_image_path', 'product');
+        $dataProductCreate['feature_image_name'] = $data['file_name'];
+        $dataProductCreate['feature_image_path'] = $data['file_path'];
+    } else if ($product) {
+        $dataProductCreate['feature_image_name'] = $product->feature_image_name;
+        $dataProductCreate['feature_image_path'] = $product->feature_image_path;
+    } else {
+        $dataProductCreate['feature_image_name'] = null;
+        $dataProductCreate['feature_image_path'] = null;
+    }
+
+    return $dataProductCreate;
+}
     public  function  delete($id)
     {
+        try{
+
+        $this->storageTraitDelete($this->product->find($id)->feature_image_path);
+        $image_path=$this->product->find($id)->images;
+        foreach($image_path as $image){
+            $this->storageTraitDelete($image->image_path);
+        }
         $this->product->find($id)->delete();
+
         return response()->json([
             'code' => 200,
             'message' => 'Success'
         ], 200);
+    }
+    catch (\Exception $exception){
+        Log::error('Error: '.$exception->getMessage().'---Line'.$exception->getLine());
+    }
     }
 
     /**
      * @param ProductAddRequest $request
      * @return array
      */
-    public function getDataProductCreate(Request $request): array
+   
+    public function checkProductById(Request $request)
     {
-        DB::beginTransaction();
-        $dataProductCreate = [
-            'name' => $request['name'],
-            'price' => $request['price'],
-            'content' => $request['content'],
-            'user_id' => auth()->id(),
-            'category_id' => $request['category_id']
-        ];
-        $data = $this->storageTraitUpload($request, 'feature_image_path', 'product');
-        if (!empty($data)) {
-            $dataProductCreate['feature_image_name'] = $data['file_name'];
-            $dataProductCreate['feature_image_path'] = $data['file_path'];
+        $data = $request->all();
+        $products = $this->product->find($data['id']);
+        $categoryName = Category::find($products->category->id)->name;
+
+        if ($products) {
+            return response()->json([
+                'code' => 200,
+                'message' => 'Success',
+                'data' => $products,
+                'category_name' => $categoryName
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not found',
+                'data' => []
+            ], 404);
         }
-        return $dataProductCreate;
+    }
+    public function getProductByCategoryId(Request $request)
+    {
+        $data = $request->all();
+        $products = $this->product->where('category_id', $data['category_id'])->get();
+        $categoryName = Category::find($data['category_id'])->name;
+        if ($products) {
+            return response()->json([
+                'code' => 200,
+                'message' => 'Success',
+                'data' => $products,
+                'category_name' => $categoryName
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not found',
+                'data' => []
+            ], 404);
+        }
+    }
+    public function getProductById(Request $request){
+        $data = $request->all();
+        $products = $this->product->find($data['id']);
+        $categoryName = $products->category->name;
+        if ($products) {
+            return response()->json([
+                'code' => 200,
+                'message' => 'Success',
+                'data' => $products,
+                'category_name' => $categoryName
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not found',
+                'data' => []
+            ], 404);
+        }
+    }
+    public function getProduct(){
+        $products = $this->product->all();
+        if($products){
+            return response()->json([
+                'code' => 200,
+                'message' => 'Success',
+                'data' => $products
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not found',
+                'data' => []
+            ], 404);
+        }
+        
+    }
+    public function hideProduct($id){
+        $product = $this->product->find($id);
+        $product->hidden = 0;
+        $product->save();
+        return response()->json([
+            'code' => 200,
+            'message' => 'Success'
+        ], 200);
+
     }
 }

@@ -3,6 +3,7 @@ namespace App\Traits;
 use http\Env\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 trait StorageImageTrait
 {
@@ -31,6 +32,16 @@ public  function storageTraitUploadMultiple($file,$folderName){
             'file_path'=>Storage::url($filepath)
         ];
         return $dataUploadFile;
+}
+public  function storageTraitDelete($filePath){
+    $normalizedPath = ltrim($filePath, '/');
+    if (substr($normalizedPath, 0, 8) === 'storage/') {
+        $normalizedPath = substr($normalizedPath, 8);
+    }
+    if (Storage::disk('public')->exists($normalizedPath)) {
+        Storage::disk('public')->delete($normalizedPath);
+    }
+    
 }
 }
 

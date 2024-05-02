@@ -107,7 +107,26 @@ Route::prefix('admin')->group(function () {
             'as'=>'product.delete',
             'uses'=>'App\Http\Controllers\AdminProductController@delete'
         ]);
-
+        Route::get('/check',[
+            'as'=>'product.check',
+            'uses'=>'App\Http\Controllers\AdminProductController@checkProductById'
+        ]);
+        Route::get('/getbycategory',[
+            'as'=>'product.getbycategory',
+            'uses'=>'App\Http\Controllers\AdminProductController@getProductByCategoryId'
+        ]);
+        Route::get('/getbyid',[
+            'as'=>'product.getbyid',
+            'uses'=>'App\Http\Controllers\AdminProductController@getProductById'
+        ]);
+        Route::get('/get',[
+            'as'=>'product.get',
+            'uses'=>'App\Http\Controllers\AdminProductController@getProduct'
+        ]);
+        Route::post('/hide',[
+            'as'=>'product.hide',
+            'uses'=>'App\Http\Controllers\AdminProductController@hideProduct'
+        ]);
     });
     Route::prefix('slider')->group(function () {
         Route::get('/', [
@@ -227,6 +246,90 @@ Route::prefix('admin')->group(function () {
             'as'=>'permissions.store',
             'uses'=>'App\Http\Controllers\AdminPermissionController@store'
         ]);
+    });
+    //
+    Route::prefix('flashsales')->group(function () {
+        Route::get('/', [
+            'as'=> 'flashsales.index',
+            'uses'=>'App\Http\Controllers\FlashSaleController@index'
+        ]);
+        Route::get('/create', [
+            'as'=> 'flashsales.create',
+            'uses'=>'App\Http\Controllers\FlashSaleController@create'
+        ]);
+        Route::post('/store',[
+            'as'=>'flashsales.store',
+            'uses'=>'App\Http\Controllers\FlashSaleController@store'
+        ]);
+        Route::post('/active',[
+            'as'=>'flashsales.active',
+            'uses'=>'App\Http\Controllers\FlashSaleController@changeActive'
+        ]);
+        Route::get('/edit/{id}',[
+            'as'=>'flashsales.edit',
+            'uses'=>'App\Http\Controllers\FlashSaleController@edit'
+        ]);
+        Route::get('/delete/{id}',[
+            'as'=>'flashsales.delete',
+            'uses'=>'App\Http\Controllers\FlashSaleController@delete'
+        ]); 
+        Route::post('/update/{id}',[
+            'as'=>'flashsales.update',
+            'uses'=>'App\Http\Controllers\FlashSaleController@update'
+        ]);
+    });
+    // Route for supplier 
+    Route::prefix('supplier')->group(function () {
+        Route::get('/get', [
+            'as'=> 'supplier.get',
+            'uses'=>'App\Http\Controllers\SupplierController@get'
+        ]);
+        Route::post('/store',[
+            'as'=>'supplier.store',
+            'uses'=>'App\Http\Controllers\SupplierController@store'
+        ]);
+        
+    });
+    // Route for warehouse
+    Route::prefix('warehouse')->group(function () {
+        Route::get('/', [
+            'as'=> 'warehouse.index',
+            'uses'=>'App\Http\Controllers\WarehouseController@index'
+        ]);
+        Route::get('/create', [
+            'as'=> 'warehouse.create',
+            'uses'=>'App\Http\Controllers\WarehouseController@create'
+        ]);
+        Route::post('/store',[
+            'as'=>'warehouse.store',
+            'uses'=>'App\Http\Controllers\WarehouseController@store'
+        ]);
+        Route::get('/edit/{id}',[
+            'as'=>'warehouse.edit',
+            'uses'=>'App\Http\Controllers\WarehouseController@edit'
+        ]);
+        Route::delete('/delete/{id}',[
+            'as'=>'warehouse.delete',
+            'uses'=>'App\Http\Controllers\WarehouseController@delete'
+        ]);
+        Route::post('/update/{id}',[
+            'as'=>'warehouse.update',
+            'uses'=>'App\Http\Controllers\WarehouseController@update'
+        ]);
+        Route::prefix('import/{warehouse_id}')->group(function () {
+            Route::get('/', [
+                'as'=> 'import.index',
+                'uses'=>'App\Http\Controllers\ImportController@index'
+            ]);
+            Route::get('/create', [
+                'as'=> 'import.create',
+                'uses'=>'App\Http\Controllers\ImportController@create'
+            ]);
+            Route::get('/getProductsSupplierWarehouse/{supplier_id}',[
+                'as'=>'import.getProductsSupplierWarehouse',
+                'uses'=>'App\Http\Controllers\ImportController@getProductsSupplierWarehouse'
+            ]);
+        });
     });
 });
 
