@@ -65,7 +65,7 @@
                                     @foreach($flashsale->products as $product)
                                     <tr data-id="{{$product->id}}">
                                         <td>{{$product->id}}</td>
-                                        <td><img src="{{'/test/public'.$product->feature_image_path}}" alt="lll" width="50" height="50"/></td>
+                                        <td><img src="{{$product->feature_image_path}}" alt="lll" width="50" height="50"/></td>
                                         <td>{{$product->name}}</td>
                                         <td class="original-price">{{$product->price}}</td>
                                         <td><input type="text" class="form-control discount" name="discount[]" value="{{$product->pivot->discount}}" required></td>

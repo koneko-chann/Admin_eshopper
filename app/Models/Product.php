@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Product extends Model
 {
     use HasFactory,SoftDeletes;
@@ -25,4 +26,8 @@ class Product extends Model
     public function flashSales(){
         return $this->belongsToMany(FlashSale::class,'product_sale','product_id','flashsale_id')->withTimestamps()->withPivot('discount','discount_price','quantity','price_after_discount');
     }
+    public function orderItems() {
+        return $this->hasMany(OrDerItems::class);
+    }
+    
 }

@@ -4,16 +4,17 @@
 
 @section('title')
     <title>Sản phẩm</title>
-@endsection('title')
+@endsection
+
 @section('css')
     <style>
         img {
             height: 150px;
             width: 100px;
-
         }
     </style>
 @endsection
+
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -31,7 +32,6 @@
                 confirmButtonText: "Yes, delete it!"
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     $.ajax({
                         type: 'GET',
                         url: urlRequest,
@@ -46,18 +46,54 @@
                             }
                         },
                         error: function () {
-
+                            Swal.fire({
+                                title: "Error!",
+                                text: "There was an error deleting the file.",
+                                icon: "error"
+                            });
                         }
-                    })
+                    });
                 }
             });
         }
 
         $(function () {
             $(document).on('click', '.action_delete', actionDelete);
-        })
+        });
+
+        $('.hidden').click(function(e){
+            e.preventDefault();
+            let urlRequest = $(this).data('url');
+            let that = $(this);
+            $.ajax({
+                type: 'POST',
+                url: urlRequest,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: $(this).data('id')
+                },
+                success: function(data){
+                    console.log(data); // Check what data is returned
+                    if(data.code === 200){
+                        if(data.hidden == true){
+                            that.html('<span class="fa fa-eye-slash"></span>');
+                        } else {
+                            that.html('<span class="fa fa-eye"></span>');
+                        }
+                    }
+                },
+                error: function(){
+                    Swal.fire({
+                        title: "Error!",
+                        text: "There was an error updating the status.",
+                        icon: "error"
+                    });
+                }
+            });
+        });
     </script>
 @endsection
+
 @section('content')
 
     <div class="content-wrapper">
@@ -95,24 +131,21 @@
                                 <th scope="col">Hình ảnh</th>
                                 <th scope="col">Danh mục</th>
                                 <th scope="col">Ẩn</th>
-
                                 <th scope="col">Action</th>
-
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($products as $product)
-
                                 <tr>
                                     <th scope="row">{{$product->id}}</th>
                                     <td>{{$product->name}}</td>
                                     <td>{{number_format($product->price)}}</td>
-                                    <td><img src="{{'/test/public'.$product->feature_image_path}}" alt=""/></td>
+                                    <td><img src="{{$product->feature_image_path}}" alt=""/></td>
                                     <td>{{optional($product->category)->name}}</td>
                                     <td>
-                                        <a href="{{route('product.hide',['id'=>$product->id])}}">
-                                            <span class="fa{{ $product->status == 1 ? ' fa-eye' : ' fa-eye-slash' }}"></span>
-                                        </a>
+                                        <button type="button" class="hidden" data-url="{{route('product.hide')}}" data-id="{{$product['id']}}">
+                                            <span class="fa{{ $product->status == true ? ' fa-eye' : ' fa-eye-slash' }}"></span>
+                                        </button>
                                     </td>
                                     <td>
                                         <a href="{{route('product.edit',['id'=>$product->id])}}"
@@ -121,10 +154,8 @@
                                            data-url="{{route('product.delete',['id'=>$product['id']])}}"
                                            class="btn btn-danger action_delete">Delete</a>
                                     </td>
-
                                 </tr>
                             @endforeach
-
                             </tbody>
                         </table>
                     </div>
@@ -134,9 +165,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 @endsection
-
-

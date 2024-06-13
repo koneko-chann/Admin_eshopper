@@ -47,7 +47,7 @@ img{
                             <div class="mb-3">
                                 <label >Anh</label>
                                 <input name="image_path" type="file" class="form-control-file" >
-<img src="{{'/test/public'.$slider['image_path']}}">
+<img src="{{$slider['image_path']}}">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

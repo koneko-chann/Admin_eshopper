@@ -94,7 +94,7 @@
                                     <th scope="row">{{$slider['id']}}</th>
                                     <td>{{$slider['name']}}</td>
                                     <td>{{$slider['description']}}</td>
-                                    <td><img src="{{'/test/public'.$slider['image_path']}}"></td>
+                                    <td><img src="{{$slider['image_path']}}"></td>
                                     <td>
                                         <a href="{{route('slider.edit',['id'=>$slider['id']])}}"
                                            class="btn btn-default">Edit</a>

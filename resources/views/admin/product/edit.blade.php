@@ -38,7 +38,7 @@
                                 <label >Ảnh đại dện</label>
                                 <input name="feature_image_path" type="file" class="form-control-file"   >
                                 <div  class="col-md-12">
-                                    <img src="{{'/test/public'.$product->feature_image_path}}">
+                                    <img src="{{$product->feature_image_path}}">
                                 </div>
                                 <label >Ảnh chi tiết</label>
                                 <input multiple name="image_path[]" type="file" class="form-control-file" >
@@ -46,7 +46,7 @@
                                     <div class="row">
                                         @foreach($product->productImages as $productImageItem)
                                         <div class="col-md-3">
-                                            <img src="{{'/test/public'.$productImageItem->image_path}}" alt="">
+                                            <img src="{{$productImageItem->image_path}}" alt="">
                                         </div>
                                         @endforeach
                                     </div>

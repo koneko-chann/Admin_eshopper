@@ -160,7 +160,7 @@ $('#start, #end').on('change', function() {
                     if(value.toString()==value1.id.toString() && exist_id.indexOf(value1.id.toString())===-1){
                         var html='<tr data-id="'+value1.id+'">';
                         html+='<td>'+value1.id+'</td>';
-                        html+='<td><img src="/test/public'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
+                        html+='<td><img src="'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
                         html+='<td>'+value1.name+'</td>';
                         html+='<td class="original-price">'+Number(value1.price).toLocaleString('vi-VN').replace(/\./g, ',')+'</td>';
                         html+='<td><input type="text" class="form-control discount" name="discount[]" value="" required></td>';

@@ -60,7 +60,7 @@
                             <tr data-id="{{$flashsale->id}}">
                                 <th scope="row"></th>
                                 <td>{{$flashsale->title}}</td>
-                                <td><img src="{{'/test/public'.$flashsale->banner_path}}" alt="lll" width="50px" height="50px"/></td>
+                                <td><img src="{{$flashsale->banner_path}}" alt="lll" width="50px" height="50px"/></td>
                                 <td >
 
                                     <div class="form-check form-switch" style="margin-left:25%;">

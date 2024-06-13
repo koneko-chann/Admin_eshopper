@@ -270,15 +270,16 @@ public function getDataProductCreate(Request $request, $product = null): array
                 'data' => []
             ], 404);
         }
-        
     }
-    public function hideProduct($id){
+    public function hideProduct(){
+        $id= request()->id;
         $product = $this->product->find($id);
-        $product->hidden = 0;
+        $product->hidden = !$product->hidden;
         $product->save();
         return response()->json([
             'code' => 200,
-            'message' => 'Success'
+            'message' => 'Success',
+            'hidden'=> $product->hidden
         ], 200);
 
     }

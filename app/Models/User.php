@@ -47,11 +47,9 @@ class User extends Authenticatable
     }
     public function checkPermissionAccess($permissionCheck){
         $roles=auth()->user()->roles;
-
        foreach ($roles as $role){
-        $permission=   $role->permission;
+        $permission=  $role->permission;
         if($permission->contains('key_code',$permissionCheck)){
-
             return true;
         }
        }

@@ -199,7 +199,7 @@
                     if(value.toString()==value1.id.toString() && exist_id.indexOf(value1.id.toString())===-1 && $('.prv:checked').val()!='0'){
                         var html='<tr data-id="'+value1.id+'">';
                         html+='<td>'+value1.id+'</td>';
-                        html+='<td><img src="/test/public'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
+                        html+='<td><img src="'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
                         html+='<td>'+value1.name+'</td>';
                         html+='<td ><input type="text" class="form-control import-price" required></td>';
                         html+='<td><input type="text" class="form-control quantity" required></td>';
@@ -212,7 +212,7 @@
                     else if(value.toString()==value1.id.toString() && exist_id.indexOf(value1.id.toString())===-1 && $('.prv:checked').val()=='0'){
                         var html='<tr data-id="'+value1.id+'">';
                         html+='<td>'+value1.id+'</td>';
-                        html+='<td><img src="/test/public'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
+                        html+='<td><img src="'+value1.feature_image_path+'" alt="" width="50" height="50"></td>';
                         html+='<td>'+value1.name+'</td>';
                         html+='<td><input type="number" class="form-control quantity" min="1" max="'+value1.quantity+'" required></td>';
                         html+='</tr>';

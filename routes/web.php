@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\StatisticController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -236,6 +238,15 @@ Route::prefix('admin')->group(function () {
         ]);
     });
 //
+Route::prefix('orders')->group(function () {
+    Route::get('/', [
+        'as'=> 'orders.index',
+        'uses'=>'App\Http\Controllers\OrderController@index'
+    ]);
+    Route::post('/changeStatus',[
+        'as'=>'orders.changeStatus',
+        'uses'=>'App\Http\Controllers\OrderController@changeStatus'
+    ]);});
     Route::prefix('permissions')->group(function () {
 
         Route::get('/create', [
@@ -330,6 +341,24 @@ Route::prefix('admin')->group(function () {
                 'uses'=>'App\Http\Controllers\ImportController@getProductsSupplierWarehouse'
             ]);
         });
+    });
+    // Route for statistic
+    Route::prefix('statistic')->group(function () {
+        Route::get('/', [
+            'as'=> 'statistic.index',
+            'uses'=>'App\Http\Controllers\StatisticController@index'
+        ]);
+        Route::get('/revenue', [StatisticController::class, 'index'])->name('revenue');
+    });
+    Route::prefix('inventory')->group(function(){
+        Route::get('/', [
+            'as'=> 'inventory.index',
+            'uses'=>'App\Http\Controllers\InventoryController@index'
+        ]);
+        Route::get('/getInventory', [
+            'as'=> 'inventory.getInventory',
+            'uses'=>'App\Http\Controllers\InventoryController@getInventory'
+        ]);
     });
 });
 

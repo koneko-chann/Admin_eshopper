@@ -74,9 +74,17 @@
                 </li><li class="nav-item">
                     <a href="{{route('users.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
-
                         <p>
                            Danh sách nhân viên
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('orders.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                           Quản lý đơn hàng
                         </p>
                     </a>
                 </li>
@@ -106,10 +114,28 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item" hidden>
+                <li class="nav-item">
+                    <a href="{{route('inventory.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Quản lý dữ tồn kho
+                        </p>
+                    </a>
+                </li>
+                
+                {{-- <li class="nav-item" hidden>
                     <a href="{{route('permissions.create')}}" class="nav-link">
                         <p>
                            Tao du lieu bang Permissions
+                        </p>
+                    </a>
+                </li> --}}
+                <li class="nav-item">
+                    <a href="{{route('statistic.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+
+                        <p>
+                           Thống kê
                         </p>
                     </a>
                 </li>
